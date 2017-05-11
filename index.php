@@ -10,5 +10,7 @@ if($dev) {
     ini_set('display_errors', 1);
 }
 
+set_exception_handler(['\Wall\App\ExceptionHandler', 'handler']);
+
 echo App::execute();
 

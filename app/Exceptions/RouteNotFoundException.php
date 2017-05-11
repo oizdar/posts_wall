@@ -1,7 +1,7 @@
 <?php
 namespace Wall\App\Exceptions;
 
-class PathException extends \Exception
+class RouteNotFoundException extends \Exception
 {
     public function __construct($message = "", $code = 404, \Throwable $previous = null)
     {

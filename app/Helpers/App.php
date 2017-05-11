@@ -1,7 +1,7 @@
 <?php
 namespace Wall\App\Helpers;
 
-use Wall\App\Exceptions\PathException;
+use Wall\App\Exceptions\RouteNotFoundException;
 use Wall\App\Response;
 
 class App
@@ -16,7 +16,7 @@ class App
         $path = explode('/', $path, 2);
 
         if($path[0] !== 'api') {
-            throw new PathException('Page Not Found');
+            throw new RouteNotFoundException('Invalid Route');
         }
 
         $action = explode('/', $path[1]);
@@ -34,7 +34,7 @@ class App
             };
         }
         if(!isset($optionalVariables) || !is_array($optionalVariables)) {
-            throw new PathException('Route not found');
+            throw new RouteNotFoundException("Api route \"{$path[1]}\" not found");
         }
 
         $controller = static::NAMESPACE_PREFIX . 'Controllers\\' . $configuredPath->controller;
