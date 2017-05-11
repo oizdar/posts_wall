@@ -3,7 +3,7 @@ namespace Wall\App;
 
 class ExceptionHandler
 {
-    public static function handler(\Exception $exception)
+    public static function handler($exception)
     {
         $httpCode = $exception->getCode();
         $content = ['error' => $exception->getMessage()];
