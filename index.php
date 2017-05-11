@@ -1,12 +1,19 @@
 <?php
-// use declarations
+use Wall\App\Helpers\Request;
 
 include(__DIR__ . '/autoload.php');
 
-$debug = filter_var(getenv('PHP_DEBUG'), FILTER_VALIDATE_BOOLEAN);
-if($debug) {
+// Check is development mode enabled
+$dev = filter_var(getenv('DEVELOPMENT'), FILTER_VALIDATE_BOOLEAN);
+if($dev) {
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
 }
 
-echo error_reporting();
+
+$method = Request::getMethod();
+$path = Request::getPath();
+
+var_dump($method, $path);
+
+
