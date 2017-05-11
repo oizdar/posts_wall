@@ -10,11 +10,9 @@ if($dev) {
     ini_set('display_errors', 1);
 }
 
-$command = App::getCommand();
+$response = App::execute();
 
-$response = $command->execute();
-
-echo $response;
+print_r($response);
 
 
 

@@ -1,0 +1,18 @@
+<?xml version='1.0' standalone='yes'?>
+<paths>
+    <path method="GET">
+        <uri>post</uri>
+        <controller>Post</controller>
+        <action>getList</action>
+    </path>
+    <path method="POST">
+        <uri>post</uri>
+        <controller>Post</controller>
+        <action>createPost</action>
+    </path>
+    <path method="PUT">
+        <uri>post/{id}</uri>
+        <controller>Post</controller>
+        <action>updatePost</action>
+    </path>
+</paths>
