@@ -1,5 +1,5 @@
 <?php
-use Wall\App\Helpers\Request;
+use Wall\App\Helpers\App;
 
 include(__DIR__ . '/autoload.php');
 
@@ -10,10 +10,11 @@ if($dev) {
     ini_set('display_errors', 1);
 }
 
+$command = App::getCommand();
 
-$method = Request::getMethod();
-$path = Request::getPath();
+$response = $command->execute();
 
-var_dump($method, $path);
+echo $response;
+
 
 

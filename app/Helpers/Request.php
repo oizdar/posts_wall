@@ -1,31 +1,32 @@
 <?php
 namespace Wall\App\Helpers;
 
+use Wall\App\Exceptions\AppException;
+
 class Request
 {
-    public static function getMethod()
+    public static function getMethod() : string
     {
-        return $_SERVER['REQUEST_METHOD'];
+        if(isset($_SERVER['REQUEST_METHOD'])) {
+            return $_SERVER['REQUEST_METHOD'];
+        }
+        throw new AppException('Only HTTP requests.');
     }
 
-    public static function getPath()
+    public static function getPath() : string
     {
-        return $_SERVER['REQUEST_URI'];
+        return explode('?', trim($_SERVER['REQUEST_URI'], '/'))[0];
     }
 
-    public static function getPost()
+    public static function getParams()
     {
-        return $_POST;
+        return $_REQUEST;
     }
-
 
     public static function getParam(string $key)
     {
         if(isset($_POST[$key])) {
             return $_POST[$key];
-        }
-        if(isset($_GET[$key])) {
-            return $_GET[$key];
         }
         return null;
     }
