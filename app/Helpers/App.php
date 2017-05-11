@@ -2,12 +2,13 @@
 namespace Wall\App\Helpers;
 
 use Wall\App\Exceptions\PathException;
+use Wall\App\Response;
 
 class App
 {
     protected const NAMESPACE_PREFIX = 'Wall\\App\\';
 
-    public static function execute()
+    public static function execute() : Response
     {
         $method = Request::getMethod();
         $path = Request::getPath();

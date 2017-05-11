@@ -10,9 +10,5 @@ if($dev) {
     ini_set('display_errors', 1);
 }
 
-$response = App::execute();
-
-print_r($response);
-
-
+echo App::execute();
 

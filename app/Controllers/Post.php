@@ -1,15 +1,14 @@
 <?php
 namespace Wall\App\Controllers;
 
-class Post
-{
-    public function __construct()
-    {
-        var_dump(true);
-    }
+use Wall\App\AbstractController;
+use Wall\App\Response;
 
-    public function getList()
+class Post extends AbstractController
+{
+
+    public function getList() : Response
     {
-        return [];
+        return new Response(200, ['arr' => 123]);
     }
 }
