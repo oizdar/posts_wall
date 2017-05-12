@@ -16,9 +16,15 @@
         <controller>Post</controller>
         <action>createPost</action>
     </path>
-    <path method="PUT">
+    <path method="POST">
         <uri>post/{id}</uri>
         <controller>Post</controller>
         <action>updatePost</action>
+    </path>
+
+    <path method="GET">
+        <uri>post/{id}/comments</uri>
+        <controller>Comments</controller>
+        <action>getPostComments</action>
     </path>
 </paths>

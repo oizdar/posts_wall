@@ -27,7 +27,6 @@ class User extends AbstractController
             if(empty($params[$field])) {
                 throw new InvalidArgumentException("Field {$field} is required and should not be empty");
             }
-
         }
 
         if(!filter_var($params['email'], FILTER_VALIDATE_EMAIL)) {

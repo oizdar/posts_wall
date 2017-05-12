@@ -69,10 +69,14 @@ class Request
     }
 
     /**
+     * @return string   Currently logged username
      * @throws AuthorizationException
      */
-    public function authenticateUser()
+    public function authenticateUser() : string
     {
-        Authorization::verify($this->authUser, $this->authPass);
+        if(!$this->authUser || !$this->authPass) {
+            throw new AuthorizationException('Invalid credentials');
+        }
+        return Authorization::verify($this->authUser, $this->authPass);
     }
 }

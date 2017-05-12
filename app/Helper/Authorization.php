@@ -12,12 +12,13 @@ class Authorization
      * @param $username string      Can be an e-mail or username
      * @param $password
      * @throws AuthorizationException
+     * @return string  Username on success
      */
-    public static function verify(string $username, string $password)
+    public static function verify(string $username, string $password) : string
     {
         $db = DbProvider::getInstance()->getConnection();
         $sql = '
-            SELECT `password` FROM `users` 
+            SELECT * FROM `users` 
             WHERE `username` = :username
             OR `email` = :username
         ';
@@ -27,10 +28,12 @@ class Authorization
         if($stmt->rowCount() !== 1 ) {
             throw new AuthorizationException('You must be logged');
         };
-        $passwordHash = $stmt->fetchColumn();
+        $result = $stmt->fetch();
 
-        if(!password_verify($password, $passwordHash)) {
+        if(!password_verify($password, $result['password'])) {
             throw new AuthorizationException('Invalid login or password');
         }
+
+        return $result['username'];
     }
 }
