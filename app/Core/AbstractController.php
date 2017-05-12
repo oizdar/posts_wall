@@ -1,7 +1,5 @@
 <?php
-namespace Wall\App;
-
-use Wall\App\Helpers\Request;
+namespace Wall\App\Core;
 
 class AbstractController
 {
@@ -12,7 +10,7 @@ class AbstractController
 
     public function __construct()
     {
-        $this->requestParams = Request::getParams();
+        $this->request = Request::getRequest();
         $this->pdo = DbProvider::getInstance()->getConnection();
     }
 }

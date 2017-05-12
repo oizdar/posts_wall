@@ -1,5 +1,5 @@
 <?php
-namespace Wall\App;
+namespace Wall\App\Core;
 
 class Response
 {

@@ -1,8 +1,8 @@
 <?php
 namespace Wall\App\Controllers;
 
-use Wall\App\AbstractController;
-use Wall\App\Response;
+use Wall\App\Core\AbstractController;
+use Wall\App\Core\Response;
 
 class Post extends AbstractController
 {

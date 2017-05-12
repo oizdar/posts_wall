@@ -1,5 +1,11 @@
 <?xml version='1.0' standalone='yes'?>
 <paths>
+    <path method="POST">
+        <uri>user/register</uri>
+        <controller>User</controller>
+        <action>register</action>
+    </path>
+
     <path method="GET">
         <uri>post</uri>
         <controller>Post</controller>

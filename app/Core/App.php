@@ -1,17 +1,34 @@
 <?php
-namespace Wall\App\Helpers;
+namespace Wall\App\Core;
 
 use Wall\App\Exceptions\RouteNotFoundException;
-use Wall\App\Response;
 
 class App
 {
+    protected static $instance;
+
+    /** @var  Request */
+    protected $request;
+
     protected const NAMESPACE_PREFIX = 'Wall\\App\\';
 
-    public static function execute() : Response
+    protected function __construct()
     {
-        $method = Request::getMethod();
-        $path = Request::getPath();
+        $this->request = Request::getRequest();
+    }
+
+    public static function init()
+    {
+        if(!self::$instance) {
+            self::$instance = new App();
+        }
+        return self::$instance;
+    }
+
+    public function execute() : Response
+    {
+        $method = $this->request->getMethod();
+        $path = $this->request->getPath();
 
         $path = explode('/', $path, 2);
 
@@ -27,7 +44,7 @@ class App
         foreach($pathsElements as $configuredPath) {
             if($method === strtoupper((string)$configuredPath->attributes()->method)) {
                 $configuredAction = explode('/', $configuredPath->uri);
-                $optionalVariables = static::comparePathArrays($action, $configuredAction);
+                $optionalVariables = $this->comparePathArrays($action, $configuredAction);
                 if(is_array($optionalVariables)) {
                     break;
                 }
@@ -43,7 +60,7 @@ class App
         return call_user_func_array([$controller, (string)$configuredPath->action], $optionalVariables);
     }
 
-    protected static function comparePathArrays(array $pathToCompare, array $comparedPath)
+    protected function comparePathArrays(array $pathToCompare, array $comparedPath)
     {
         $count = count($pathToCompare);
         if ($count !== count($comparedPath)) {

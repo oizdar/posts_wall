@@ -1,9 +1,9 @@
 <?php
 include 'autoload.php';
 
-$db = \Wall\App\DbProvider::getInstance()->getConnection();
+$db = \Wall\App\Core\DbProvider::getInstance()->getConnection();
 
-$sql = file_get_contents(__DIR__ . 'schema.sql');
+$sql = file_get_contents(__DIR__ . '/schema.sql');
 
 $stmt = $db->prepare($sql);
 echo "\n---------------------------------\n";

@@ -1,5 +1,5 @@
 <?php
-use Wall\App\Helpers\App;
+use Wall\App\Core\App;
 
 include(__DIR__ . '/autoload.php');
 
@@ -10,7 +10,8 @@ if($dev) {
     ini_set('display_errors', 1);
 }
 
-set_exception_handler(['\Wall\App\ExceptionHandler', 'handler']);
+set_exception_handler(['\Wall\App\Helper\ExceptionHandler', 'handler']);
 
-echo App::execute();
+$app = App::init();
+echo $app->execute();
 

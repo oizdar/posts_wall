@@ -1,5 +1,7 @@
 <?php
-namespace Wall\App;
+namespace Wall\App\Helper;
+
+use Wall\App\Core\Response;
 
 class ExceptionHandler
 {
