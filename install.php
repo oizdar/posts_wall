@@ -3,20 +3,7 @@ include 'autoload.php';
 
 $db = \Wall\App\DbProvider::getInstance()->getConnection();
 
-$sql = '
-    CREATE TABLE IF NOT EXISTS `posts`
-    (
-        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `content` TEXT NOT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-    
-    CREATE TABLE IF NOT EXISTS `comments`
-    (
-        `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `post_id` INT UNSIGNED NOT NULL,
-        `content` TEXT NOT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-';
+$sql = file_get_contents(__DIR__ . 'schema.sql');
 
 $stmt = $db->prepare($sql);
 echo "\n---------------------------------\n";
