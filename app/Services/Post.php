@@ -107,4 +107,16 @@ class Post
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         };
     }
+
+    public function isPostExists(int $postId) : bool
+    {
+        $sql = 'SELECT COUNT(*) FROM `posts` WHERE `id` = :id';
+        $stmt = $this->db->prepare($sql);
+
+        if(!$stmt->execute(['id' => $postId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+
+        return (bool)$stmt->fetchColumn();
+    }
 }

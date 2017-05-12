@@ -4,16 +4,22 @@ namespace Wall\App\Controllers;
 use Wall\App\Core\AbstractController;
 use Wall\App\Core\Response;
 use Wall\App\Exceptions\InvalidArgumentException;
+use Wall\App\Exceptions\PostNotFoundException;
 use Wall\App\Services\Comments as CommentsService;
+use \Wall\App\Services\Post as PostService;
 
 class Comments extends AbstractController
 {
     /** @var CommentsService */
     protected $commentsService;
 
+    /** @var PostService */
+    protected $postService;
+
     public function __construct()
     {
         $this->commentsService = new CommentsService();
+        $this->postService = new PostService();
         parent::__construct();
     }
 
@@ -40,13 +46,17 @@ class Comments extends AbstractController
             throw new InvalidArgumentException('postId must be integer');
         }
 
-        $postContent = $this->request->getParam('content');
+        if(!$this->postService->isPostExists($postId)) {
+            throw new PostNotFoundException("Post with ID: {$postId} not found.");
+        };
 
-        if(empty($postContent)) {
+        $commentContent = $this->request->getParam('content');
+
+        if(empty($commentContent)) {
             throw new InvalidArgumentException('Field "content" is required and should not be empty.');
         }
 
-        $this->commentsService->addComment($postId, $username, $postContent);
+        $this->commentsService->addComment($postId, $username, $commentContent);
         return new Response(201, ['message' => 'Comment added.']);
     }
 
