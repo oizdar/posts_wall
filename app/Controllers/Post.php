@@ -5,15 +5,20 @@ use Wall\App\Core\AbstractController;
 use Wall\App\Core\Response;
 use Wall\App\Exceptions\InvalidArgumentException;
 use Wall\App\Services\Post as PostService;
+use Wall\App\Services\Comments as CommentsService;
 
 class Post extends AbstractController
 {
     /** @var PostService */
     protected $postService;
 
+    /** @var CommentsService  */
+    protected $commentsService;
+
     public function __construct()
     {
         $this->postService = new PostService();
+        $this->commentsService = new CommentsService();
         parent::__construct();
     }
 
@@ -23,6 +28,10 @@ class Post extends AbstractController
         $limit = $this->request->getParam('limit');
 
         $posts = $this->postService->getList($page, $limit);
+        foreach($posts as &$post) {
+            $comments = $this->commentsService->getPostComments($post['id']);
+            $post['comments'] = $comments;
+        }
         return new Response(200, $posts);
     }
 
