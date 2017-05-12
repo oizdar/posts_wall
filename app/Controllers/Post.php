@@ -16,5 +16,8 @@ class Post extends AbstractController
 
     public function createPost() : Response
     {
+        $this->request->authenticateUser();
+
+        return new Response(200, ['test' => 'user authorized']);
     }
 }

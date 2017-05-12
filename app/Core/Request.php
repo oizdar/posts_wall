@@ -2,6 +2,8 @@
 namespace Wall\App\Core;
 
 use Wall\App\Exceptions\AppException;
+use Wall\App\Exceptions\AuthorizationException;
+use Wall\App\Helper\Authorization;
 
 class Request
 {
@@ -11,7 +13,6 @@ class Request
     protected $method;
     protected $params;
 
-    protected $authType;
     protected $authUser;
     protected $authPass;
 
@@ -54,7 +55,7 @@ class Request
         return $this->path;
     }
 
-    public function getParams()
+    public function getParams() : array
     {
         return $this->params;
     }
@@ -67,9 +68,11 @@ class Request
         return null;
     }
 
-    public function isAuthorized()
+    /**
+     * @throws AuthorizationException
+     */
+    public function authenticateUser()
     {
-        $this->authUser
+        Authorization::verify($this->authUser, $this->authPass);
     }
-
 }
