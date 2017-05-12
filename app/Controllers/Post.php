@@ -41,6 +41,9 @@ class Post extends AbstractController
 
     public function updatePost($id) : Response
     {
+        if(!is_int($id)) {
+            throw new InvalidArgumentException('postId must be integer');
+        }
         $username = $this->request->authenticateUser();
         $postContent = $this->request->getParam('content');
         if(empty($postContent)) {

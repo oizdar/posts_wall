@@ -27,4 +27,9 @@
         <controller>Comments</controller>
         <action>getPostComments</action>
     </path>
+    <path method="POST">
+        <uri>post/{id}/comments</uri>
+        <controller>Comments</controller>
+        <action>addPostComment</action>
+    </path>
 </paths>
