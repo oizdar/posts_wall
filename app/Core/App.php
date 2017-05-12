@@ -38,7 +38,7 @@ class App
 
         $action = explode('/', $path[1]);
 
-        $pathsElements = simplexml_load_file(__DIR__ . '/../paths.xml');
+        $pathsElements = simplexml_load_file(__DIR__ . '/../routes.xml');
 
         /** @var $configuredPath \SimpleXMLElement */
         foreach($pathsElements as $configuredPath) {

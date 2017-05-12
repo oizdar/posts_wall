@@ -62,7 +62,8 @@ class Post
         return (bool)$stmt->fetchColumn();
     }
 
-    public function getList(int $page = null, int $limit = null)
+    /** @throws DatabaseException */
+    public function getList(int $page = null, int $limit = null) : array
     {
         if($page === null) {
             $page = 1;
@@ -84,5 +85,26 @@ class Post
 
         $posts = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         return $posts;
+    }
+
+    /**
+     * Deletes also related rows
+     *
+     * @throws DatabaseException
+     */
+    public function deletePost(int $postId, string $username) : void
+    {
+        $sql = 'SELECT *
+            FROM `posts` AS `p`
+            LEFT JOIN `comments` AS `c` ON `c`.`post_id` = `p`.`id`
+            LEFT JOIN `users_likes_comments` AS `lc` ON `lc`.`comment_id` = c.`id`
+            LEFT JOIN `users_likes_posts` AS `lp` ON `lp`.`post_id` = p.`id`
+            WHERE `p`.`user` = :user AND `p`.`id` = :id;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['user' => $username, 'id' => $postId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        };
     }
 }

@@ -41,10 +41,13 @@ class Post extends AbstractController
 
     public function updatePost($id) : Response
     {
-        if(!is_int($id)) {
+        $username = $this->request->authenticateUser();
+
+        $id = filter_var($id, FILTER_VALIDATE_INT);
+        if($id === false) {
             throw new InvalidArgumentException('postId must be integer');
         }
-        $username = $this->request->authenticateUser();
+
         $postContent = $this->request->getParam('content');
         if(empty($postContent)) {
             throw new InvalidArgumentException('Field "content" is required and should not be empty.');
@@ -58,5 +61,22 @@ class Post extends AbstractController
         return new Response(200, ['message' => 'Post updated.']);
     }
 
+    public function deletePost($id) : Response
+    {
+        $username = $this->request->authenticateUser();
+
+        $id = filter_var($id, FILTER_VALIDATE_INT);
+        if($id === false) {
+            throw new InvalidArgumentException('postId must be integer');
+        }
+
+        if(!$this->postService->isEditable($id, $username)) {
+            throw new InvalidArgumentException('Delete failed. Can delete only own posts.');
+        }
+
+        $this->postService->deletePost($id, $username);
+        return new Response(200, ['message' => 'post successfully deleted']);
+
+    }
 
 }

@@ -49,8 +49,4 @@ class Comments extends AbstractController
         $this->commentsService->addComment($postId, $username, $postContent);
         return new Response(201, ['message' => 'Comment added.']);
     }
-
-
-
-
 }

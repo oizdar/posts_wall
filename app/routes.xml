@@ -21,6 +21,11 @@
         <controller>Post</controller>
         <action>updatePost</action>
     </path>
+    <path method="DELETE">
+        <uri>post/{id}</uri>
+        <controller>Post</controller>
+        <action>deletePost</action>
+    </path>
 
     <path method="GET">
         <uri>post/{id}/comments</uri>
