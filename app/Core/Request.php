@@ -31,7 +31,7 @@ class Request
 
     public static function getRequest()
     {
-        if(!isset(self::$request)) {
+        if(!self::$request) {
             self::$request = new Request();
         }
         return self::$request;

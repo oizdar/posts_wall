@@ -7,18 +7,19 @@ use Wall\App\Exceptions\AuthorizationException;
 class Authorization
 {
     /**
-     * If username or password are invalid throws AuthorizationException
+     * If (username/email) or password are invalid throws AuthorizationException
      *
-     * @param $username
+     * @param $username string      Can be an e-mail or username
      * @param $password
      * @throws AuthorizationException
      */
-    public static function verify($username, $password)
+    public static function verify(string $username, string $password)
     {
         $db = DbProvider::getInstance()->getConnection();
         $sql = '
             SELECT `password` FROM `users` 
             WHERE `username` = :username
+            OR `email` = :username
         ';
         $stmt = $db->prepare($sql);
         $stmt->execute(['username' => $username]);
