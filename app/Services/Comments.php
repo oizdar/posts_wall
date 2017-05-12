@@ -58,4 +58,36 @@ class Comments
         $comments = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         return $comments;
     }
+
+    /** @throws DatabaseException */
+    public function isEditable(int $postId, int $commentId, string $username) : bool
+    {
+        $sql = 'SELECT COUNT(*) FROM `comments` 
+          WHERE `id` = :id
+          AND `post_id` = :postId
+          AND `user` = :username;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['postId' => $postId, 'id' => $commentId, 'username' => $username])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+
+        return (bool)$stmt->fetchColumn();
+    }
+
+    /** @throws DatabaseException */
+    public function deleteComment(int $postId, int $commentId, string $username) : void
+    {
+        $sql = 'DELETE `comments` FROM `comments` 
+          WHERE `id` = :id
+          AND `post_id` = :postId
+          AND `user` = :username;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['postId' => $postId, 'id' => $commentId, 'username' => $username])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+    }
 }
