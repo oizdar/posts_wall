@@ -27,7 +27,6 @@ class App
 
     public function execute() : Response
     {
-        $method = $this->request->getMethod();
         $path = $this->request->getPath();
 
         $path = explode('/', $path, 2);
@@ -36,12 +35,35 @@ class App
             throw new RouteNotFoundException('Invalid Route');
         }
 
-        $action = explode('/', $path[1]);
+        $method = $this->request->getMethod();
+
+        if(isset($path[1])) {
+            return $this->executeController($path[1], $method);
+        }  elseif($method === 'GET') {
+            return $this->executeDefaultController();
+        } else {
+            throw new RouteNotFoundException("Api route / not found");
+        }
+    }
+
+    protected function executeDefaultController()
+    {
+        $defaultPath = simplexml_load_file(__DIR__ . '/../routes.xml')->default->path;
+
+        $controller = static::NAMESPACE_PREFIX . 'Controllers\\' . $defaultPath->controller;
+        $controller = new $controller;
+
+        return call_user_func([$controller, (string)$defaultPath->action]);
+    }
+
+    protected function executeController($path, $method)
+    {
+        $action = explode('/', $path);
 
         $pathsElements = simplexml_load_file(__DIR__ . '/../routes.xml');
 
         /** @var $configuredPath \SimpleXMLElement */
-        foreach($pathsElements as $configuredPath) {
+        foreach($pathsElements->path as $configuredPath) {
             if($method === strtoupper((string)$configuredPath->attributes()->method)) {
                 $configuredAction = explode('/', $configuredPath->uri);
                 $optionalVariables = $this->comparePathArrays($action, $configuredAction);
@@ -51,7 +73,7 @@ class App
             };
         }
         if(!isset($optionalVariables) || !is_array($optionalVariables)) {
-            throw new RouteNotFoundException("Api route \"{$path[1]}\" not found");
+            throw new RouteNotFoundException("Api route \"{$path}\" not found");
         }
 
         $controller = static::NAMESPACE_PREFIX . 'Controllers\\' . $configuredPath->controller;

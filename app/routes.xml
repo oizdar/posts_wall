@@ -1,5 +1,11 @@
 <?xml version='1.0' standalone='yes'?>
 <paths>
+    <default>
+        <path method="GET">
+            <controller>Post</controller>
+            <action>getList</action>
+        </path>
+    </default>
     <path method="POST">
         <uri>user/register</uri>
         <controller>User</controller>
@@ -36,5 +42,10 @@
         <uri>post/{id}/comments</uri>
         <controller>Comments</controller>
         <action>addPostComment</action>
+    </path>
+    <path method="DELETE">
+        <uri>post/{id}/comments/{commentId}</uri>
+        <controller>Comments</controller>
+        <action>deletePostComment</action>
     </path>
 </paths>
