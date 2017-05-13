@@ -3,6 +3,7 @@ namespace Wall\App\Services;
 
 use Wall\App\Core\DbProvider;
 use Wall\App\Exceptions\DatabaseException;
+use Wall\App\Exceptions\InvalidArgumentException;
 
 class Comments
 {
@@ -89,5 +90,88 @@ class Comments
         if(!$stmt->execute(['postId' => $postId, 'id' => $commentId, 'username' => $username])) {
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         }
+    }
+
+    /** @throws DatabaseException */
+    public function isCommentExists($commentId) : bool
+    {
+        $sql = 'SELECT COUNT(*) FROM `comments` WHERE `id` = :commentId';
+        $stmt = $this->db->prepare($sql);
+
+        if(!$stmt->execute(['commentId' => $commentId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+
+        return (bool)$stmt->fetchColumn();
+    }
+
+    /** @throws DatabaseException */
+    public function likeComment($commentId, $username) : void
+    {
+        $this->db->beginTransaction();
+        $sql = 'INSERT IGNORE INTO `users_likes_comments` 
+          SET 
+            `username` = :username,
+            `comment_id` = :commentId;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['username' => $username, 'commentId' => $commentId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+        if($stmt->rowCount() === 0) {
+            throw new InvalidArgumentException('You already like this comment.');
+        }
+
+        $sql = 'UPDATE `comments` 
+            SET `likes` = `likes` + 1
+            WHERE `id` = :commentId;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['commentId' => $commentId])) {
+            $this->db->rollBack();
+            throw new DatabaseException('exec Database error occurred, try again later or contact administrator.');
+        }
+
+        if(!$this->db->commit()) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        };
+    }
+
+    /** @throws DatabaseException */
+    public function unlikeComment($commentId, $username) : void
+    {
+        $this->db->beginTransaction();
+        $sql = 'DELETE FROM `users_likes_comments` 
+          WHERE `username` = :username 
+          AND `comment_id` = :commentId;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['username' => $username, 'commentId' => $commentId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+        var_dump($stmt->rowCount());
+        if($stmt->rowCount() === 0) {
+            $this->db->rollBack();
+            throw new InvalidArgumentException('You can\'t unlike this comment.');
+        }
+
+        $sql = 'UPDATE `comments` 
+            SET `likes` = `likes` - 1
+            WHERE `id` = :commentId
+            AND `likes` > 0;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['commentId' => $commentId])) {
+            $this->db->rollBack();
+            throw new DatabaseException('exec Database error occurred, try again later or contact administrator.');
+        }
+
+        if(!$this->db->commit()) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        };
     }
 }

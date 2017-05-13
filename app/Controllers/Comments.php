@@ -3,6 +3,7 @@ namespace Wall\App\Controllers;
 
 use Wall\App\Core\AbstractController;
 use Wall\App\Core\Response;
+use Wall\App\Exceptions\CommentNotFoundException;
 use Wall\App\Exceptions\InvalidArgumentException;
 use Wall\App\Exceptions\PostNotFoundException;
 use Wall\App\Services\Comments as CommentsService;
@@ -81,5 +82,40 @@ class Comments extends AbstractController
         $this->commentsService->deleteComment($postId, $commentId, $username);
 
         return new Response(200, ['message' => 'Comment successfully deleted.']);
+    }
+
+    public function likeComment($commentId)
+    {
+        $username = $this->request->authenticateUser();
+
+        $commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+        if($commentId === false) {
+            throw new InvalidArgumentException('commentId must be integer');
+        }
+
+        if(!$this->commentsService->isCommentExists($commentId)) {
+            throw new CommentNotFoundException("Comment with ID: {$commentId} doesn't exists");
+        }
+
+        $this->commentsService->likeComment($commentId, $username);
+
+        return new Response(200, ['message' => 'Comment liked.']);
+    }
+    public function unlikeComment($commentId)
+    {
+        $username = $this->request->authenticateUser();
+
+        $commentId = filter_var($commentId, FILTER_VALIDATE_INT);
+        if($commentId === false) {
+            throw new InvalidArgumentException('commentId must be integer');
+        }
+
+        if(!$this->commentsService->isCommentExists($commentId)) {
+            throw new CommentNotFoundException("Comment with ID: {$commentId} doesn't exists");
+        }
+
+        $this->commentsService->unlikeComment($commentId, $username);
+
+        return new Response(200, ['message' => 'Comment unliked.']);
     }
 }

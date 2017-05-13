@@ -48,4 +48,15 @@
         <controller>Comments</controller>
         <action>deletePostComment</action>
     </path>
+
+    <path method="PUT">
+        <uri>comment/{id}/like</uri>
+        <controller>Comments</controller>
+        <action>likeComment</action>
+    </path>
+    <path method="PUT">
+        <uri>comment/{id}/unlike</uri>
+        <controller>Comments</controller>
+        <action>unlikeComment</action>
+    </path>
 </paths>
