@@ -4,6 +4,7 @@ namespace Wall\App\Controllers;
 use Wall\App\Core\AbstractController;
 use Wall\App\Core\Response;
 use Wall\App\Exceptions\InvalidArgumentException;
+use Wall\App\Exceptions\PostNotFoundException;
 use Wall\App\Services\Post as PostService;
 use Wall\App\Services\Comments as CommentsService;
 
@@ -86,6 +87,41 @@ class Post extends AbstractController
         $this->postService->deletePost($id, $username);
         return new Response(200, ['message' => 'post successfully deleted']);
 
+    }
+
+    public function likePost($postId)
+    {
+        $username = $this->request->authenticateUser();
+
+        $postId = filter_var($postId, FILTER_VALIDATE_INT);
+        if($postId === false) {
+            throw new InvalidArgumentException('postId must be integer');
+        }
+
+        if(!$this->postService->isPostExists($postId)) {
+            throw new PostNotFoundException("Post with ID: {$postId} doesn't exists");
+        }
+
+        $this->postService->likePost($postId, $username);
+
+        return new Response(200, ['message' => 'Post liked.']);
+    }
+    public function unlikePost($postId)
+    {
+        $username = $this->request->authenticateUser();
+
+        $postId = filter_var($postId, FILTER_VALIDATE_INT);
+        if($postId === false) {
+            throw new InvalidArgumentException('postId must be integer');
+        }
+
+        if(!$this->postService->isPostExists($postId)) {
+            throw new PostNotFoundException("Post with ID: {$postId} doesn't exists");
+        }
+
+        $this->postService->unlikePost($postId, $username);
+
+        return new Response(200, ['message' => 'Post unliked.']);
     }
 
 }

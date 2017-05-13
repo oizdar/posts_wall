@@ -131,7 +131,7 @@ class Comments
         $stmt = $this->db->prepare($sql);
         if(!$stmt->execute(['commentId' => $commentId])) {
             $this->db->rollBack();
-            throw new DatabaseException('exec Database error occurred, try again later or contact administrator.');
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         }
 
         if(!$this->db->commit()) {
@@ -167,7 +167,7 @@ class Comments
         $stmt = $this->db->prepare($sql);
         if(!$stmt->execute(['commentId' => $commentId])) {
             $this->db->rollBack();
-            throw new DatabaseException('exec Database error occurred, try again later or contact administrator.');
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         }
 
         if(!$this->db->commit()) {

@@ -12,6 +12,6 @@ if($dev) {
 
 set_exception_handler(['\Wall\App\Helper\ExceptionHandler', 'handler']);
 
-$app = App::init();
+$app = new App();
 echo $app->execute();
 

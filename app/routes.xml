@@ -59,4 +59,15 @@
         <controller>Comments</controller>
         <action>unlikeComment</action>
     </path>
+
+    <path method="PUT">
+        <uri>post/{id}/like</uri>
+        <controller>Post</controller>
+        <action>likePost</action>
+    </path>
+    <path method="PUT">
+        <uri>post/{id}/unlike</uri>
+        <controller>Post</controller>
+        <action>unlikePost</action>
+    </path>
 </paths>

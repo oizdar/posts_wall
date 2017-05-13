@@ -12,17 +12,9 @@ class App
 
     protected const NAMESPACE_PREFIX = 'Wall\\App\\';
 
-    protected function __construct()
+    public function __construct()
     {
         $this->request = Request::getRequest();
-    }
-
-    public static function init()
-    {
-        if(!self::$instance) {
-            self::$instance = new App();
-        }
-        return self::$instance;
     }
 
     public function execute() : Response

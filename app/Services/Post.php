@@ -3,6 +3,7 @@ namespace Wall\App\Services;
 
 use Wall\App\Core\DbProvider;
 use Wall\App\Exceptions\DatabaseException;
+use Wall\App\Exceptions\InvalidArgumentException;
 
 class Post
 {
@@ -118,5 +119,74 @@ class Post
         }
 
         return (bool)$stmt->fetchColumn();
+    }
+
+    /** @throws DatabaseException */
+    public function likePost($postId, $username) : void
+    {
+        $this->db->beginTransaction();
+        $sql = 'INSERT IGNORE INTO `users_likes_posts` 
+          SET 
+            `username` = :username,
+            `post_id` = :postId;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['username' => $username, 'postId' => $postId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+        if($stmt->rowCount() === 0) {
+            throw new InvalidArgumentException('You already like this post.');
+        }
+
+        $sql = 'UPDATE `posts` 
+            SET `likes` = `likes` + 1
+            WHERE `id` = :postId;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['postId' => $postId])) {
+            $this->db->rollBack();
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+
+        if(!$this->db->commit()) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        };
+    }
+
+    /** @throws DatabaseException */
+    public function unlikePost($commentId, $username) : void
+    {
+        $this->db->beginTransaction();
+        $sql = 'DELETE FROM `users_likes_posts` 
+          WHERE `username` = :username 
+          AND `post_id` = :postId;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['username' => $username, 'postId' => $commentId])) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+        if($stmt->rowCount() === 0) {
+            $this->db->rollBack();
+            throw new InvalidArgumentException('You can\'t unlike this post.');
+        }
+
+        $sql = 'UPDATE `posts` 
+            SET `likes` = `likes` - 1
+            WHERE `id` = :postId
+            AND `likes` > 0;
+        ';
+
+        $stmt = $this->db->prepare($sql);
+        if(!$stmt->execute(['postId' => $commentId])) {
+            $this->db->rollBack();
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        }
+
+        if(!$this->db->commit()) {
+            throw new DatabaseException('Database error occurred, try again later or contact administrator.');
+        };
     }
 }
