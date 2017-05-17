@@ -19,7 +19,7 @@ class Post
     }
 
     /** @throws DatabaseException */
-    public function addPost(string $username, string $content) : void
+    public function addPost(string $username, string $content) : array
     {
         $sql = 'INSERT INTO `posts` 
             SET `content` = :content,`user` = :username
@@ -29,7 +29,16 @@ class Post
         if(!$stmt->execute(['content' => $content, 'username' => $username])) {
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         };
+        $insertedId = $this->db->lastInsertId();
 
+        $sql = 'SELECT * FROM `posts`
+          WHERE id = :id';
+        $stmt = $this->db->prepare($sql);
+
+        $stmt->execute(['id' => $insertedId]);
+        $post = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $post['comments'] = [];
+        return $post;
     }
 
     /** @throws DatabaseException */

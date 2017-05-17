@@ -45,8 +45,8 @@ class Post extends AbstractController
             throw new InvalidArgumentException('Field "content" is required and should not be empty.');
         }
 
-        $this->postService->addPost($username, $postContent);
-        return new Response(201, ['message' => 'Post added.']);
+        $insertedPost = $this->postService->addPost($username, $postContent);
+        return new Response(201, ['message' => 'Post added.', 'post' => $insertedPost]);
     }
 
     public function updatePost($id) : Response

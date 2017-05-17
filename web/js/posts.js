@@ -14,26 +14,7 @@ class Posts {
 
     showAll() {
         this.data.forEach(function(post) {
-            let postId = this.prefix + post.id;
-            let postElement = $(this.postContainerHtml).attr('id', postId);
-            let title = '<strong>' + post.user + ':</strong> '
-                + new Date(post.create_date).toLocaleString();
-
-            let panelButtons = $(this.panelButtons);
-            panelButtons.find('#edit-post').attr('id', 'edit-'+postId).attr('onclick', 'insertEditData()');
-            panelButtons.find('#add-post-comment').attr('id', 'add-post-comment-'+postId).on('click', this.showAddCommentForm(postId));
-
-            let panelTitle = $(this.panelTitle).append(title).append(panelButtons);
-            let panelHeading = $(this.panelHeading).append(panelTitle);
-            postElement.append(panelHeading);
-
-            let postContent = $(this.postContent).html(this.parseContent(post.content));
-            postContent.append($(this.postCommentsContainer).attr('id', 'comments-'+postId));
-            let panelBody = $(this.panelBody).append(postContent);
-            postElement.append(panelBody);
-            $('#posts-container').append(postElement);
-
-            this.showComments(postId, post.comments);
+           this.showOne(post)
         }.bind(this));
     }
 
@@ -62,5 +43,35 @@ class Posts {
                 $(commentsContainerId).prepend(element);
             }
         }
+    }
+
+    showOne(post, before = false) {
+        let postId = this.prefix + post.id;
+        let postElement = $(this.postContainerHtml).attr('id', postId);
+        let title = '<strong>' + post.user + ':</strong> '
+            + new Date(post.create_date).toLocaleString();
+
+        let panelButtons = $(this.panelButtons);
+        panelButtons.find('#edit-post').attr('id', 'edit-'+postId).attr('onclick', 'insertEditData()');
+        panelButtons.find('#add-post-comment').attr('id', 'add-post-comment-'+postId).on('click', this.showAddCommentForm(postId));
+
+        let panelTitle = $(this.panelTitle).append(title).append(panelButtons);
+        let panelHeading = $(this.panelHeading).append(panelTitle);
+        postElement.append(panelHeading);
+
+        let postContent = $(this.postContent).html(this.parseContent(post.content));
+        postContent.append($(this.postCommentsContainer).attr('id', 'comments-'+postId));
+        let panelBody = $(this.panelBody).append(postContent);
+        postElement.append(panelBody);
+        if(before) {
+            postElement.fadeIn('slow');
+            $('#posts-container').prepend(postElement);
+            $(':input', '#publish-post-form').val('');
+
+        } else {
+            $('#posts-container').append(postElement);
+        }
+
+        this.showComments(postId, post.comments);
     }
 }

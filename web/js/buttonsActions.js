@@ -32,7 +32,8 @@ function publishPost() {
                     alert.removeClass('hidden');
                     alert.addClass('alert-success');
                     alert.html('<strong>'+res.data.message+'</strong>');
-
+                    let postsObj = new Posts({});
+                    postsObj.showOne(res.data.post, true);
                 }
                 return false;
             },
