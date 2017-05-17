@@ -29,6 +29,7 @@ class Post
         if(!$stmt->execute(['content' => $content, 'username' => $username])) {
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         };
+
         $insertedId = $this->db->lastInsertId();
 
         $sql = 'SELECT * FROM `posts`
@@ -39,6 +40,11 @@ class Post
         $post = $stmt->fetch(\PDO::FETCH_ASSOC);
         $post['comments'] = [];
         return $post;
+    }
+
+    protected Function getLastInsertedPost() : array
+    {
+
     }
 
     /** @throws DatabaseException */

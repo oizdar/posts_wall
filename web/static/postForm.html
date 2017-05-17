@@ -3,8 +3,8 @@
         <a class=" btn btn-link" onclick="toggleRegisterForm()">Remember to register first.</a>
     </div>
 </div>
-<form id="publish-post-form">
-    <input type="hidden" id="postId" />
+<form id="publish-post-form" onsubmit="return publishPost()">
+    <input type="hidden" id="post-id" name="id"/>
     <div class="form-group">
         <label for="post-content">Publish message:</label>
         <textarea class="form-control" id="post-content" rows="5" required></textarea>
@@ -12,8 +12,8 @@
     <label for="login">Login and Password:</label>
     <div class="alert hidden" id="post-form-alert"></div>
     <div class="form-group row col-xs-offset-1">
-        <input type="text" class="form-control-sm" id="login" placeholder="Enter login or e-mail:" required>
+        <input type="text" class="form-control-sm" id="login" placeholder="Enter login or e-mail:" >
         <input type="password" class="form-control-sm" id="password" placeholder="Enter Password:" required>
-        <button type="submit" class="btn-xs btn-primary" onclick="publishPost(); return false;">Submit »</button>
+        <button type="submit" class="btn-xs btn-primary">Submit »</button>
     </div>
 </form>

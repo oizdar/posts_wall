@@ -86,7 +86,6 @@ class Post extends AbstractController
 
         $this->postService->deletePost($id, $username);
         return new Response(200, ['message' => 'post successfully deleted']);
-
     }
 
     public function likePost($postId)

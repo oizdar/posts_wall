@@ -52,7 +52,7 @@ class Posts {
             + new Date(post.create_date).toLocaleString();
 
         let panelButtons = $(this.panelButtons);
-        panelButtons.find('#edit-post').attr('id', 'edit-'+postId).attr('onclick', 'insertEditData()');
+        panelButtons.find('#edit-post').attr('id', 'edit-'+postId).attr('onclick', 'insertEditData(this)');
         panelButtons.find('#add-post-comment').attr('id', 'add-post-comment-'+postId).on('click', this.showAddCommentForm(postId));
 
         let panelTitle = $(this.panelTitle).append(title).append(panelButtons);
