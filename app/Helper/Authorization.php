@@ -26,7 +26,7 @@ class Authorization
         $stmt->execute(['username' => $username]);
 
         if($stmt->rowCount() !== 1 ) {
-            throw new AuthorizationException('You must be logged');
+            throw new AuthorizationException('Invalid login or password');
         };
         $result = $stmt->fetch();
 
