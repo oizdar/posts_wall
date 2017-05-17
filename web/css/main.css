@@ -16,3 +16,7 @@
 .list-group-item > form{
     white-space: normal;
 }
+
+.panel-body img {
+    max-width: 100%;
+}

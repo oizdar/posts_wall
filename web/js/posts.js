@@ -13,6 +13,12 @@ class Posts {
     }
 
     showAll() {
+        if(this.data.length < 10) {
+            let button = $('#load-more-posts');
+                button.text('All posts loaded');
+                button.addClass('disabled');
+        }
+
         this.data.forEach(function(post) {
            this.showOne(post)
         }.bind(this));

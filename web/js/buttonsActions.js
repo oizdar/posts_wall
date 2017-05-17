@@ -115,3 +115,22 @@ function registerUser() {
 
     return false;
 }
+
+function loadMorePosts(page)
+{
+    console.log(page);
+    $.ajax({
+        type: 'GET',
+        url: '/api/post?page='+page,
+        success: function (res) {
+            if(res.code === 'OK') {
+                posts = new Posts(res.data);
+                posts.showAll();
+                $('#load-more-posts').attr('onclick', 'loadMorePosts('+(page+1)+')');
+            }
+        },
+        error: function (error) {
+            postsData = JSON.parse(error.responseText).data.error;
+        }
+    });
+}

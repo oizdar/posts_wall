@@ -41,9 +41,8 @@ class Comments {
         return element;
     }
 
-    /** @TODO should create another class for parsing */
     parseContent(content) {
-        return content
+        return ContentParser.parseLinks(content);
     }
 
     createCommentForm(postId) {
