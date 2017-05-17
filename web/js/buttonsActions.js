@@ -58,7 +58,7 @@ function publishPost() {
             }
         });
         if(!postId) {
-            return false;
+            return false; //prevent page refreshing
         }
     }
 
@@ -77,4 +77,41 @@ function insertEditData(button) {
     postForm.find('#login').val(postUsername);
     postForm.find('#password').val('');
     $('html body').animate({scrollTop: 0}, 'slow');
+}
+
+function registerUser() {
+    let form = $('#register');
+    if(form[0].checkValidity()) {
+        let data = {
+            email: form.find('#email').val(),
+            username: form.find('#login').val(),
+            password: form.find('#password').val(),
+        };
+        console.log(data);
+        $.ajax({
+            method: 'POST',
+            url: '/api/user/register',
+            data: data,
+            success: function(res) {
+                if(res.code === 'OK') {
+                    let alert = $('#post-form-alert');
+                    alert.removeClass('hidden');
+                    alert.removeClass('alert-danger');
+                    alert.addClass('alert-success');
+                    alert.html('<strong>'+res.data.message+'</strong>');
+                    console.log(res);
+                }
+            },
+            error: function (error) {
+                let response = JSON.parse(error.responseText);
+                let alert = $('#post-form-alert');
+                alert.removeClass('hidden');
+                alert.removeClass('alert-success');
+                alert.addClass('alert-danger');
+                alert.html('<strong>'+response.data.error+'</strong>');
+            }
+        });
+    }
+
+    return false;
 }

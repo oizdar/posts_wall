@@ -6,8 +6,13 @@
 
 .post-content {
     padding: 10px 0;
+    white-space: pre-line;
 }
 
-.comment-form {
-    padding-bottom: 20px;
+.list-group-item {
+    margin-top: 1em;
+}
+
+.list-group-item > form{
+    white-space: normal;
 }

@@ -32,7 +32,7 @@ class User
     {
         $sql = 'SELECT count(*) FROM `users` WHERE `username` = :username';
         $stmt = $this->db->prepare($sql);
-        if($stmt->execute(['username' => $username])) {
+        if(!$stmt->execute(['username' => $username])) {
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         };
 
@@ -54,6 +54,7 @@ class User
             'username' => $username,
             'passwordHash' => $passwordHash,
         ])) {
+            var_dump('xxx');
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         };
     }

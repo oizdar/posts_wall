@@ -18,9 +18,8 @@ class Posts {
         }.bind(this));
     }
 
-    /** @TODO create class to parsing*/
     parseContent(content) {
-        return content;
+        return ContentParser.parseLinks(content);
     }
 
     showComments(postId, comments) {
@@ -35,7 +34,6 @@ class Posts {
             if($('#comments-form-' + postId).length === 0) {
                 let commentsContainerId = '#comments-' + postId + '> ul ';
                 let emptyElement = commentsContainerId + ' .empty';
-                console.log($(emptyElement).length);
                 if($(emptyElement).length) {
                    $(emptyElement).remove();
                 }

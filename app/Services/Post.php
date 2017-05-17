@@ -21,6 +21,7 @@ class Post
     /** @throws DatabaseException */
     public function addPost(string $username, string $content) : array
     {
+        $content = htmlspecialchars($content);
         $sql = 'INSERT INTO `posts` 
             SET `content` = :content,`user` = :username
         ';
@@ -42,14 +43,11 @@ class Post
         return $post;
     }
 
-    protected Function getLastInsertedPost() : array
-    {
-
-    }
-
     /** @throws DatabaseException */
     public function updatePost(int $postId, string $username, string $content) : void
     {
+        $content = htmlspecialchars($content);
+
         $sql = 'UPDATE `posts` 
             SET `content` = :content
             WHERE `user` = :user

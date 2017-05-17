@@ -1,5 +1,5 @@
-<form id="register">
-    <div class="form-group">
+<form id="register" onsubmit="return registerUser();">
+    <div class="form-group" >
         <label for="email">E-mail:</label>
         <input type="email" class="form-control" id="email" placeholder="Enter e-mail:" required>
     </div>
@@ -11,6 +11,7 @@
         <label for="password">Password:</label>
         <input type="password" class="form-control" id="password" placeholder="Enter password:" required>
     </div>
+    <div class="alert hidden" id="post-form-alert"></div>
     <div class="button-group text-right">
         <a class="btn btn-link" onclick="togglePostForm()">« Back</a>
         <button type="submit" class="btn btn-primary">Submit »</button>
