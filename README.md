@@ -11,7 +11,7 @@ Frontend:
 - Bootstrap
 
 ### Installation:
-- (important)Repository doesn't have bootstrap files. Copy them inside /web/bootstrap folder. or modify index.html file references.
+- Repository doesn't have bootstrap files. Copy them inside /web/bootstrap folder. or modify index.html file references.
 jQuery is included from external source.
 - Example configuration is in .env.dist file, copy it as .env
 - This system is built on docker. To start app is enough to use command `docker-compose up` in project directory.
