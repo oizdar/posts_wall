@@ -6,6 +6,8 @@ class Comments {
         this.commentsElement = '<li class="list-group-item"></li>';
         this.commentContent = '<div class="comment-body">Not found any comments.</div>';
         this.commentFooter = '<h5 class="text-info text-right comment-header"></h5>';
+        this.like = ' <span class="glyphicon glyphicon-thumbs-up"></span>';
+        this.badge = '<span class="badge"></span>';
         $('#' + this.commentsContainerId).append(this.commentsList);
     };
 
@@ -30,7 +32,8 @@ class Comments {
         element.append($(this.commentContent).html(this.parseContent(comment.content)));
 
         let footerHtml = '<strong>'+comment.user+':</strong> ' + new Date(comment.create_date).toLocaleString();
-        element.append($(this.commentFooter).append(footerHtml));
+        let likesBadge = $(this.badge).text(comment.likes);
+        element.append($(this.commentFooter).append(footerHtml).append(likesBadge).append(this.like));
         return element;
     }
 
