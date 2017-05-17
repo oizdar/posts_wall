@@ -20,3 +20,7 @@
 .panel-body img {
     max-width: 100%;
 }
+
+.comment-header > span {
+    margin-left: 0.5em;
+}

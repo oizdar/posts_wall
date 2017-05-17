@@ -9,6 +9,8 @@ class Posts {
         this.panelBody = '<div class="panel-body"></div>';
         this.postContent = '<div class="post-content text-justify" id="post-content"></div>';
         this.postCommentsContainer = '<div class="col-xs-offset-2 col-xs-10"></div>';
+        this.like = '<span class="glyphicon glyphicon-thumbs-up"></span>';
+        this.badge = '<span class="badge"></span>';
 
     }
 
@@ -52,14 +54,14 @@ class Posts {
     showOne(post, before = false) {
         let postId = this.prefix + post.id;
         let postElement = $(this.postContainerHtml).attr('id', postId);
-        let title = '<strong>' + post.user + ':</strong> '
+        let title = ' <strong>' + post.user + ':</strong> '
             + new Date(post.create_date).toLocaleString();
 
         let panelButtons = $(this.panelButtons);
         panelButtons.find('#edit-post').attr('id', 'edit-'+postId).attr('onclick', 'insertEditData(this)');
         panelButtons.find('#add-post-comment').attr('id', 'add-post-comment-'+postId).on('click', this.showAddCommentForm(postId));
-
-        let panelTitle = $(this.panelTitle).append(title).append(panelButtons);
+        let likesBadge = $(this.badge).text(post.likes);
+        let panelTitle = $(this.panelTitle).append(this.like).append(likesBadge).append(title).append(panelButtons);
         let panelHeading = $(this.panelHeading).append(panelTitle);
         postElement.append(panelHeading);
 
