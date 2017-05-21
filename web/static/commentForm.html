@@ -1,11 +1,14 @@
-<form class="comment-form">
+<form class="comment-form" onsubmit="return publishComment();">
     <div class="form-group">
-        <textarea class="form-control" id="postContent" placeholder="Write a comment:" rows="2"></textarea>
+        <textarea class="form-control" name="content" placeholder="Write a comment:" rows="2"></textarea>
     </div>
-    <label for="login" class="small">Login and Password:</label>
+    <label class="small">Login and Password:</label>
     <div class="form-group">
-        <input type="email" class="small" id="login" placeholder="Enter login or e-mail:">
-        <input type="password" class="small" id="password" placeholder="Enter Password:" required>
+        <input type="hidden" name="post_id">
+        <input type="text" class="small" name="login" placeholder="Enter login or e-mail:" required>
+        <input type="password" class="small" name="password" placeholder="Enter Password:" required>
         <button type="submit" class="btn btn-xs btn-success">Comment»</button>
     </div>
+    <div class="alert hidden" id="comment-form-alert"></div>
+
 </form>

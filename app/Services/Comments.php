@@ -19,7 +19,7 @@ class Comments
     }
 
     /** @throws DatabaseException */
-    public function addComment(int $postId, string $username, string $content) : void
+    public function addComment(int $postId, string $username, string $content) : array
     {
         $sql = 'INSERT INTO `comments` 
             SET `post_id` = :postId, `content` = :content,`user` = :username
@@ -33,6 +33,17 @@ class Comments
         ])) {
             throw new DatabaseException('Database error occurred, try again later or contact administrator.');
         };
+
+        $id = $this->db->lastInsertId();
+
+        $sql = 'SELECT * FROM `comments`
+            WHERE id = :id;
+        ';
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+
     }
 
     public function getPostComments(int $postId, int $page = null, int $limit = null)

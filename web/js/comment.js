@@ -26,6 +26,12 @@ class Comments {
         }
     }
 
+    insertOne(comment) {
+        let commentsList = '#' + this.commentsContainerId + ' > ul';
+        let element = this.createComment(comment);
+        $(commentsList).prepend(element);
+    }
+
     createComment(comment) {
         let commentId = 'comment-'+comment.id;
         let element = $(this.commentsElement).attr('id', commentId);
@@ -49,8 +55,13 @@ class Comments {
     }
 
     createCommentForm(postId) {
-        let element = $(this.commentsElement).attr('id', 'comments-form-'+postId);
-        element.load('static/commentForm.html');
+        let element = $(this.commentsElement);
+        element.load('static/commentForm.html', function() {
+            $(this).find('form').attr('id', 'comment-form-'+postId);
+            $(this).find('#comment-form-alert').attr('id', 'comment-form-alert-'+postId);
+            let id = postId.split('-').pop();
+            $(this).find('[name="post_id"]').attr('value', id);
+        });
         element.fadeIn('slow');
         return element;
     }

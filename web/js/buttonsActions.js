@@ -118,7 +118,6 @@ function registerUser() {
 
 function loadMorePosts(page)
 {
-    console.log(page);
     $.ajax({
         type: 'GET',
         url: '/api/post?page='+page,
@@ -133,4 +132,42 @@ function loadMorePosts(page)
             postsData = JSON.parse(error.responseText).data.error;
         }
     });
+}
+
+
+function publishComment() {
+    let commentForm = event.target;
+    let postId = $(commentForm).find('[name="post_id"]').val();
+    if(commentForm[0].checkValidity()) {
+        let url = '/api/post/'+postId+'/comments';
+        let basic ='Basic '+  btoa($(commentForm).find('[name="login"]').val()+':'+$(commentForm).find('[name="password"]').val());
+        $.ajax({
+            method: 'POST',
+            url: url,
+            data: {
+                content: $(commentForm).find('[name="content"]').val(),
+            },
+            headers: {
+                'Authorization': basic
+            },
+            success: function(res) {
+                if(res.code === 'OK') {
+                    let alert = $('#comment-form-alert-post-'+postId);
+                    let commentsObj = new Comments('comments-post-'+postId, {});
+                    commentsObj.insertOne(res.data.comment);
+                }
+            },
+            error: function (error) {
+                let response = JSON.parse(error.responseText);
+                let alert = $('#comment-form-alert-post-'+postId);
+                alert.removeClass('hidden');
+                alert.removeClass('alert-success');
+                alert.addClass('alert-danger');
+                alert.html('<strong>'+response.data.error+'</strong>');
+            }
+        });
+
+    }
+    return false; //prevent defaults
+
 }

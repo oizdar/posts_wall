@@ -57,8 +57,9 @@ class Comments extends AbstractController
             throw new InvalidArgumentException('Field "content" is required and should not be empty.');
         }
 
-        $this->commentsService->addComment($postId, $username, $commentContent);
-        return new Response(201, ['message' => 'Comment added.']);
+        $comment = $this->commentsService->addComment($postId, $username, $commentContent);
+
+        return new Response(201, ['message' => 'Comment added.', 'comment' => $comment]);
     }
 
     public function deletePostComment($postId, $commentId) : Response
